@@ -8,82 +8,7 @@ class Fraccion
         # Variables de la clase
         @numerador = Integer(numerador)
         @denominador = Integer(denominador)
-    end
-    
-    # Funciones aritmeticas
-    def sumar(numerador, denominador)
-        if @denominador == denominador
-            @numerador = @numerador + numerador
-        else
-            den = mcm(@denominador, denominador)
-            num = @numerador * (den/@denominador)
-            num = num + (numerador * (den/denominador))
-            @denominador = den
-            @numerador = num
-        end
-        
         minimizar
-    end
-  
-    def restar(numerador, denominador)
-        if @denominador == denominador
-            @numerador = @numerador - numerador
-        else
-            den = mcm(@denominador, denominador)
-            num = @numerador * (den/@denominador)
-            num = num - (numerador * (den/denominador))
-            @denominador = den
-            @numerador = num
-        end
-        
-        minimizar
-    end
-    
-    def multiplicar(numerador, denominador)
-        @numerador = @numerador * numerador
-        @denominador = @denominador * denominador
-        
-        minimizar
-    end
-    
-    def dividir(numerador, denominador)
-        @numerador = @numerador * denominador
-        @denominador = @denominador * numerador
-        
-        minimizar
-    end
-    
-    # Sobrecarga operador +
-    def + (other)
-        aux = Fraccion.new(@numerador, @denominador)
-        aux.sumar(other.numerador, other.denominador)
-        aux
-    end
-    
-    # Sobrecarga operador -
-    def - (other)
-        aux = Fraccion.new(@numerador, @denominador)
-        aux.restar(other.numerador, other.denominador)
-        aux
-    end
-    
-    # Sobrecarga operador *
-    def * (other)
-        aux = Fraccion.new(@numerador, @denominador)
-        aux.multiplicar(other.numerador, other.denominador)
-        aux
-    end
-    
-    # Sobrecarga operador /
-    def / (other)
-        aux = Fraccion.new(@numerador, @denominador)
-        aux.dividir(other.numerador, other.denominador)
-        aux
-    end
-    
-    # to string
-    def to_s
-        "#{@numerador}/#{@denominador}"
     end
     
     # Maximo Comun Divisor
@@ -111,8 +36,61 @@ class Fraccion
         nil
     end
     
+    # Sobrecarga operador +
+    def + (other)
+        n = 0
+        d = 0
+        if @denominador == other.denominador
+            n = @numerador + other.numerador
+            d = @denominador
+        else
+            d = mcm(@denominador, other.denominador)
+            n = @numerador * (d/@denominador)
+            n = n + (other.numerador * (d/other.denominador))
+        end
+        
+        Fraccion.new(n, d)
+    end
+    
+    # Sobrecarga operador -
+    def - (other)
+        n = 0
+        d = 0
+        if @denominador == other.denominador
+            n = @numerador - other.numerador
+            d = @denominador
+        else
+            d = mcm(@denominador, other.denominador)
+            n = @numerador * (d/@denominador)
+            n = n - (other.numerador * (d/other.denominador))
+        end
+        
+        Fraccion.new(n, d)
+    end
+    
+    # Sobrecarga operador *
+    def * (other)
+        n = @numerador * other.numerador
+        d = @denominador * other.denominador
+        
+        Fraccion.new(n, d)
+    end
+    
+    # Sobrecarga operador /
+    def / (other)
+        n = @numerador * other.denominador
+        d = @denominador * other.numerador
+        
+        Fraccion.new(n, d)
+    end
+    
+    # to string
+    def to_s
+        "#{@numerador}/#{@denominador}"
+    end
+    
     # Indicar que fuciones son privadas y cuales publicas
-    private :mcd, :mcm
-    public :sumar, :restar, :multiplicar, :dividir, :minimizar, :to_s
+    private :mcd, :mcm, :minimizar
+    public :to_s
     
 end
